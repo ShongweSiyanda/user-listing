@@ -9,18 +9,14 @@ use Illuminate\Support\Facades\Validator;
 
 class UserListingController extends Controller
 {
-    private $userListingRepository;
+    private UserListingRepositoryInterface $userListingRepository;
 
     public function __construct(UserListingRepositoryInterface $userListingRepository)
     {
         $this->userListingRepository = $userListingRepository;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         try {
@@ -31,18 +27,8 @@ class UserListingController extends Controller
         } catch (\Exception $PDOException) {
             return view('index', ['errors' => $PDOException]);
         }
-
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -62,10 +48,10 @@ class UserListingController extends Controller
            ];
 
             $validator = Validator::make($data, [
-                'first_name' => 'required',
-                'last_name' => 'required',
+                'first_name' => 'required|string|max:255',
+                'last_name' => 'required|string|max:255',
                 'email' => 'required|email',
-                'position' => 'required',
+                'position' => 'required|string|max:255',
             ]);
 
             if ($validator->fails()) {
@@ -84,8 +70,13 @@ class UserListingController extends Controller
     }
 
 
-
-    public function destroy($id)
+    /**
+     * Deletes a selected user
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     * Status of the request - true when record is found and deleted
+     */
+    public function destroy($id): \Illuminate\Http\JsonResponse
     {
         $this->userListingRepository->destroyUser($id);
         return response()->json(['success' => 'User Deleted Successfully!']);
