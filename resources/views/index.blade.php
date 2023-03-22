@@ -23,9 +23,9 @@
                                     <td><p class="mb-0">{{ucfirst($user->first_name)}} {{ucfirst($user->last_name)}}</p></td>
                                     <td><p class="mb-0">{{$user->email}}</p></td>
                                     <td>
-                                        {{--<p class="mb-0">
+                                        <p class="mb-0">
                                             <a href="javascript:void(0)"
-                                               data-url="{{ route('users.deleteUser', $user->user_id) }}"
+                                               data-url="{{ route('users.destroy', $user->user_id) }}"
                                                data-toggle="modal"
                                                data-backdrop="static" data-keyboard="false"
                                                data-target="#deleteUser"
@@ -35,7 +35,7 @@
                                                         d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/>
                                                 </svg>
                                             </a>
-                                        </p>--}}
+                                        </p>
                                     </td>
                                 </tr>
                             @endforeach
@@ -49,6 +49,66 @@
             </div>
         </div>
     </div>
+    <!--confirm delete -->
+    <div class="modal fade" id="deleteUser" tabindex="-1" role="dialog" aria-labelledby="deleteUserTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                    <div class="alert status-msg" style="display:none">
+                        <ul></ul>
+                    </div>
+
+                    <div class="form-group">
+                        <p class="mb-0">Are you sure you want to delete this user?</p>
+                        <input type="hidden" id="isConfirmed" value="">
+                    </div>
+                    <div class="form-group text-right">
+
+                        <button type="button" class="btn btn-gray notConfirmed">Cancel</button>
+                        &nbsp;&nbsp;
+                        <button type="button" class="btn btn-proceed confirmed">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $(document).on('click', '.delete-user', function () {
+
+            let user_URL = $(this).data('url');
+            let rowOjb = $(this);
+
+            $('.notConfirmed').click(function (){
+                $('#isConfirmed').val(false);
+                $('#deleteUser').modal('hide');
+            });
+            $('.confirmed').click(function (){
+                $('#isConfirmed').val(true);
+                $.ajax({
+                    url: user_URL,
+                    type: 'DELETE',
+                    dataType: 'json',
+                    success: function (data) {
+                        //alert(data.success);
+                        $('#deleteUser').modal('hide');
+                        rowOjb.parents("tr").remove();
+                    }
+                });
+            });
+
+        });
+
+        </script>
     <style>
         .delete-icon {
             width: 16px;

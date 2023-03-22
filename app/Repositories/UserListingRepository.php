@@ -11,4 +11,9 @@ class UserListingRepository implements UserListingRepositoryInterface
     {
         return UserListing::orderBy('created_at', 'desc')->paginate(10);
     }
+    public function destroyUser($id)
+    {
+        $user = UserListing::where('user_id',$id);
+        $user->delete();
+    }
 }

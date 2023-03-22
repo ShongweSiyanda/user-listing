@@ -88,14 +88,9 @@ class UserListingController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\UserListing  $userListing
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(UserListing $userListing)
+    public function destroy($id)
     {
-        //
+        $this->userListingRepository->destroyUser($id);
+        return response()->json(['success' => 'User Deleted Successfully!']);
     }
 }
