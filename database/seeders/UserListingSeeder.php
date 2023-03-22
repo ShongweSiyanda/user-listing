@@ -15,6 +15,6 @@ class UserListingSeeder extends Seeder
      */
     public function run()
     {
-        UserListing::factory(15)->create();
+        UserListing::factory(100)->create();
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserListingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
+Route::controller(UserListingController::class)->group(function(){
+    Route::get('/', 'index');
 });
