@@ -7,7 +7,7 @@ use App\Repositories\Interfaces\UserListingRepositoryInterface;
 
 class UserListingRepository implements UserListingRepositoryInterface
 {
-    public function allUserListing()
+    public function listAllUsers()
     {
         return UserListing::orderBy('created_at', 'desc')->paginate(10);
     }

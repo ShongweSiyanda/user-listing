@@ -20,7 +20,7 @@ class UserListingController extends Controller
     public function index()
     {
         try {
-            $allUsers = $this->userListingRepository->allUserListing();
+            $allUsers = $this->userListingRepository->listAllUsers();
             if ($allUsers) {
                 return view('index', ['allUsers' => $allUsers]);
             }
