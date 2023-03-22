@@ -16,5 +16,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(UserListingController::class)->group(function(){
     Route::get('/', 'index');
+    Route::post('/', 'store')->name('users.store');
     Route::delete('/{id}', 'destroy')->name('users.destroy');
 });

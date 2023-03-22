@@ -16,4 +16,8 @@ class UserListingRepository implements UserListingRepositoryInterface
         $user = UserListing::where('user_id',$id);
         $user->delete();
     }
+    public function storeUser($data)
+    {
+        return UserListing::create($data);
+    }
 }

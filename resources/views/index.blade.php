@@ -49,6 +49,52 @@
             </div>
         </div>
     </div>
+    <!-- create modal -->
+    <div class="modal fade" id="newUser" tabindex="-1" role="dialog" aria-labelledby="newUserTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <form if="new_user">
+                            {{ csrf_field() }}
+                            <div class="alert status-msg" style="display:none">
+                                <ul></ul>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="first_name">Name</label>
+                                <input type="text" class="form-control" name="first_name" id="first_name"
+                                       placeholder="Enter your name">
+                            </div>
+                            <div class="form-group">
+                                <label for="last_name">Surname</label>
+                                <input type="text" class="form-control" name="last_name" id="last_name"
+                                       placeholder="Enter your surname">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control" name="email" id="email"
+                                       placeholder="Enter your email">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Position</label>
+                                <input type="text" class="form-control" name="position" id="position"
+                                       placeholder="Enter your position">
+                            </div>
+                            <div class="form-group text-right">
+
+                                <button type="button" class="btn btn-gray create-exit">Cancel</button>
+                                &nbsp;&nbsp;
+                                <button type="submit" class="btn btn-proceed btn-submit">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!--confirm delete -->
     <div class="modal fade" id="deleteUser" tabindex="-1" role="dialog" aria-labelledby="deleteUserTitle"
          aria-hidden="true">
@@ -82,6 +128,60 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+        $(".btn-submit").click(function (e) {
+            e.preventDefault();
+
+            let first_name = $("#first_name").val();
+            let last_name = $("#last_name").val();
+            let email = $("#email").val();
+            let position = $("#position").val();
+
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('users.store') }}",
+                data: {first_name: first_name, last_name: last_name, email: email, position: position},
+                success: function (data) {
+                    if ($.isEmptyObject(data.error)) {
+                        //alert(data.success);
+                        printSuccess(data.success)
+                    } else {
+                        printErrorMsg(data.error);
+                    }
+                }
+            });
+
+        });
+
+        $(".create-exit").click(function (){
+            $('#newUser').modal('hide');
+            location.reload();
+        });
+
+        function printErrorMsg(msg) {
+            $(".status-msg").find("ul").html('');
+            $(".status-msg").css('display', 'block');
+            $(".status-msg p").css('display', 'none');
+            $(".status-msg ul").css('display', 'block');
+            $(".status-msg").addClass('alert-danger');
+            $.each(msg, function (key, value) {
+                $(".status-msg").find("ul").append('<li>' + value + '</li>');
+            });
+
+        }
+        function resetForm() {
+            $('#first_name').val('');
+            $('#last_name').val('');
+            $('#email').val('');
+            $('#position').val('');
+        }
+        function printSuccess(msg) {
+            $(".status-msg").css('display', 'block');
+            $(".status-msg").removeClass('alert-danger').addClass('alert-success');
+            $(".status-msg ul").css('display', 'none');
+            $(".status-msg").append('<p class="alert-success">' + msg + '</p>');
+            resetForm();
+        }
 
         $(document).on('click', '.delete-user', function () {
 

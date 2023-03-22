@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\UserListing;
 use App\Repositories\Interfaces\UserListingRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class UserListingController extends Controller
 {
@@ -51,42 +52,38 @@ class UserListingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+
+            $data = [
+               'first_name' => $request->first_name,
+               'last_name' => $request->last_name,
+               'email' => $request->email,
+               'position' => $request->position,
+           ];
+
+            $validator = Validator::make($data, [
+                'first_name' => 'required',
+                'last_name' => 'required',
+                'email' => 'required|email',
+                'position' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['error' => $validator->errors()->all()]);
+            }
+
+            $this->userListingRepository->storeUser($data);
+            $response = response()->json(['success' => 'New user successfully added.']);
+
+        }
+        catch (\Exception $exception){
+            $response = response()->json(['error' => $exception]);
+        }
+
+        return $response;
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\UserListing  $userListing
-     * @return \Illuminate\Http\Response
-     */
-    public function show(UserListing $userListing)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\UserListing  $userListing
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(UserListing $userListing)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\UserListing  $userListing
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, UserListing $userListing)
-    {
-        //
-    }
 
     public function destroy($id)
     {
