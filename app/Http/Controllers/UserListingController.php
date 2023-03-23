@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\Interfaces\UserListingRepositoryInterface;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -21,10 +25,10 @@ class UserListingController extends Controller
 
     /**
      * Get all the user records from the DB table
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|void
+     * @return Application|Factory|View
      * A list / collection of users and displays it in a table view
      */
-    public function index()
+    public function index(): View|Factory|Application
     {
         $allUsers = null;
         $errors = null;
@@ -42,11 +46,11 @@ class UserListingController extends Controller
 
     /**
      * Validates and stores a newly created user in DB Table.
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
      * A response when a record is created, else an error when message or validation error if validation fails.
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         try{
 
@@ -83,10 +87,10 @@ class UserListingController extends Controller
     /**
      * Deletes a selected user
      * @param $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * Status of the request - true when record is found and deleted
      */
-    public function destroy($id): \Illuminate\Http\JsonResponse
+    public function destroy($id): JsonResponse
     {
         $this->userListingRepository->destroyUser($id);
         return response()->json(['success' => 'User Deleted Successfully!']);
