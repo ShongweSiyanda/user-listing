@@ -110,7 +110,12 @@
                                        placeholder="Enter your position">
                             </div>
                             <div class="form-group text-right">
-
+                                <button type="button" class="btn create-loader px-4" disabled>
+                                    <div class="spinner-border text-light" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </button>
+                                &nbsp;&nbsp;
                                 <button type="button" class="btn btn-gray create-exit">Cancel</button>
                                 &nbsp;&nbsp;
                                 <button type="submit" class="btn btn-proceed btn-submit">Save</button>
@@ -139,6 +144,12 @@
                     </div>
                     <div class="form-group text-right">
 
+                        <button type="button" class="btn confirm-loader px-4" disabled>
+                            <div class="spinner-border text-light" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </button>
+                        &nbsp;&nbsp;
                         <button type="button" class="btn btn-gray notConfirmed">Cancel</button>
                         &nbsp;&nbsp;
                         <button type="button" class="btn btn-proceed confirmed">Confirm</button>
@@ -148,6 +159,10 @@
         </div>
     </div>
     <script type="text/javascript">
+        $( document ).ready(function() {
+
+        $(".confirm-loader").hide();
+        $(".create-loader").hide();
 
         $.ajaxSetup({
             headers: {
@@ -157,6 +172,7 @@
 
         $(".btn-submit").click(function (e) {
             e.preventDefault();
+            $(".create-loader").show();
 
             let first_name = $("#first_name").val();
             let last_name = $("#last_name").val();
@@ -170,9 +186,11 @@
                 success: function (data) {
                     if ($.isEmptyObject(data.error)) {
                         //alert(data.success);
-                        printSuccess(data.success)
+                        printSuccess(data.success);
+                        $(".create-loader").hide();
                     } else {
                         printErrorMsg(data.error);
+                        $(".create-loader").hide();
                     }
                 }
             });
@@ -210,9 +228,7 @@
             $(".status-msg").append('<p class="alert-success">' + msg + '</p>');
             resetForm();
         }
-
         $(document).on('click', '.delete-user', function () {
-
             let user_URL = $(this).data('url');
             let rowOjb = $(this);
 
@@ -221,6 +237,7 @@
                 $('#deleteUser').modal('hide');
             });
             $('.confirmed').click(function () {
+                $(".confirm-loader").show();
                 $('#isConfirmed').val(true);
                 $.ajax({
                     url: user_URL,
@@ -229,11 +246,13 @@
                     success: function (data) {
                         //alert(data.success);
                         $('#deleteUser').modal('hide');
+                        $(".confirm-loader").hide();
                         rowOjb.parents("tr").remove();
                     }
                 });
             });
 
+        });
         });
 
     </script>
@@ -242,7 +261,10 @@
             width: 16px;
             fill: red;
         }
-
+        .spinner-border {
+            width: 1.5rem!important;
+            height: 1.5rem!important;
+        }
         .db-error-icon {
             width: 100%;
             fill: red;
@@ -254,7 +276,9 @@
         .db-error {
             color: red;
         }
-
+        .confirm-loader:disabled,.create-loader:disabled {
+            opacity: 1!important;
+        }
         .pagination div a {
             background-color: gray !important;
             color: #fff;
@@ -273,29 +297,29 @@
             width: 22px;
         }
 
-        .btn-proceed {
+        .btn-proceed,.confirm-loader,.create-loader {
             background: #000;
             color: #fff;
-            border: 3px solid #000;
+            border: 2px solid #000;
         }
 
         .btn-proceed:hover, btn-proceed:active {
             background: #fff;
             color: #000;
-            border: 3px solid #000;
+            border: 2px solid #000;
             box-shadow: none !important;
         }
 
         .btn-gray {
-            background: gray;
-            color: #fff;
-            border: 3px solid gray;
+            background: #fff;
+            color: gray;
+            border: 2px solid gray;
         }
 
         .btn-gray:hover, .btn-gray:active {
-            background: transparent;
-            color: gray;
-            border: 3px solid gray;
+            background: gray;
+            color: #fff;
+            border: 2px solid gray;
             box-shadow: none !important;
         }
 
