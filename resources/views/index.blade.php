@@ -134,7 +134,7 @@
                     </div>
 
                     <div class="form-group">
-                        <p class="mb-0">Are you sure you want to delete this user?</p>
+                        <p class="mb-0">Please confirm you would like to delete this user?</p>
                         <input type="hidden" id="isConfirmed" value="">
                     </div>
                     <div class="form-group text-right">
