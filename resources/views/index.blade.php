@@ -8,10 +8,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-12 text-right">
+                    @if(!$errors)
                     <button type="button" class="btn btn-proceed" data-backdrop="static" data-keyboard="false"
                             data-toggle="modal" data-target="#newUser">
                         Add new user
                     </button>
+                    @endif
                 </div>
                 <div class="col-sm-12 py-3 px-lg-3 px-0">
                     @if($errors)
@@ -22,7 +24,7 @@
                             <div class="col-lg-11 col-9 pt-lg-2">
                                 <p class="mb-0 db-error"><b>
                                        Database connection errors!</b> <br>You might need to run <b>migrations</b>,
-                                    looks like your table does not exist.
+                                    looks like your database does not exist.
                                 </p>
                             </div>
                         </div>
