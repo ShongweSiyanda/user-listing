@@ -26,14 +26,17 @@ class UserListingController extends Controller
      */
     public function index()
     {
+        $allUsers = null;
+        $errors = null;
+
         try {
             $allUsers = $this->userListingRepository->listAllUsers();
-            if ($allUsers) {
-                return view('index', ['allUsers' => $allUsers]);
-            }
+
         } catch (\Exception $PDOException) {
-            return view('index', ['errors' => $PDOException]);
+            $errors = $PDOException;
         }
+
+        return view('index',['allUsers' => $allUsers],['errors' => $errors]);
     }
 
 
