@@ -32,4 +32,9 @@ class UserListingControllerTest extends TestCase
         $this->post('/', $data);
         $this->assertDatabaseHas('user_listings', $data);
     }
+    public function test_delete_user(){
+        $response = $this->delete('/10');
+        $response->assertStatus(200);
+        $this->assertDatabaseMissing('user_listings',['user_id'=>10]);
+    }
 }
