@@ -41,7 +41,7 @@
                             @endforeach
                             </tbody>
                         </table>
-                        <div class="col-sm-12">
+                        <div class="col-sm-12 pagination">
                             {{ $allUsers->links() }}
                         </div>
                     @endif
@@ -213,6 +213,17 @@
         .delete-icon {
             width: 16px;
             fill: red;
+        }
+        .pagination div a {
+            background-color: gray !important;
+            color: #fff;
+        }
+        p.leading-5{
+            color:#fff!important;
+        }
+        .cursor-default {
+            background: #000 !important;
+            color: #fff;
         }
         nav svg{
             width:22px;
