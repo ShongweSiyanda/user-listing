@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\UserListing;
 use App\Repositories\Interfaces\UserListingRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -11,12 +10,20 @@ class UserListingController extends Controller
 {
     private UserListingRepositoryInterface $userListingRepository;
 
+    /**
+     * Repository Constructor
+     * @param UserListingRepositoryInterface $userListingRepository
+     */
     public function __construct(UserListingRepositoryInterface $userListingRepository)
     {
         $this->userListingRepository = $userListingRepository;
     }
 
-
+    /**
+     * Get all the user records from the DB table
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|void
+     * A list / collection of users and displays it in a table view
+     */
     public function index()
     {
         try {
@@ -31,10 +38,10 @@ class UserListingController extends Controller
 
 
     /**
-     * Store a newly created resource in storage.
-     *
+     * Validates and stores a newly created user in DB Table.
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
+     * A response when a record is created, else an error when message or validation error if validation fails.
      */
     public function store(Request $request)
     {
